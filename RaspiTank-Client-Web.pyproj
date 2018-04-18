@@ -33,6 +33,7 @@
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="static\css\bootstrap.min.css" />
     <Content Include="static\css\style.css" />
     <Content Include="static\img\arrow_clear.png" />
     <Content Include="static\img\arrow_down.png" />
@@ -44,7 +45,10 @@
     <Content Include="static\img\off_camera.png" />
     <Content Include="static\img\settings.png" />
     <Content Include="static\img\stop.png" />
+    <Content Include="static\js\bootstrap.min.js" />
     <Content Include="static\js\jquery-3.1.1.min.js" />
+    <Content Include="static\js\jquery-3.2.1.slim.min.js" />
+    <Content Include="static\js\popper.min.js" />
     <Content Include="static\js\script.js" />
     <Content Include="static\js\socket.io.min.js" />
     <Content Include="templates\index.html" />
