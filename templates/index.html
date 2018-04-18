@@ -1,0 +1,109 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>RaspiTank Client</title>
+    <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/socket.io.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+
+<body style="background: url(static/img/background.png)">
+    <div class="container" style="min-height: 100vh; height: 100vh; width: 80%; ">
+        <div class="row justify-content-between" style="padding-top: 12px ">
+            <div class="col-3">
+                <button id="mode_button" type="button" class="btn btn-primary">Change Mode to Automatic</button>
+            </div>
+            <div id="error_alert" class="alert alert-danger justify-content-center" style="display: none" role="alert">
+            </div>
+            <div class="col-2">
+                <h5 id="ping_label" style="color: aliceblue"></h5>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 60px">
+            <div class="col-md-6" style="">
+                <div class="box">
+                    <button id="button_forward" class="btn control_button"><img src="{{ url_for('static', filename='img/arrow_up.png') }}" class="img-responsive"></button>
+                </div>
+                <div class="box">
+                    <button id="button_left" class="btn control_button"><img src="{{ url_for('static', filename='img/arrow_left.png') }}" class="img-responsive"></button>
+                    <button class="btn control_button"><img src="{{ url_for('static', filename='img/arrow_clear.png') }}" class="img-responsive"></button>
+                    <button id="button_right" class="btn control_button"><img src="{{ url_for('static', filename='img/arrow_right.png') }}" class="img-responsive"></button>
+                </div>
+                <div class="box">
+                    <button id="button_back" class="btn control_button"><img src="{{ url_for('static', filename='img/arrow_down.png') }}" class="img-responsive"></button>
+                </div>
+            </div>
+            <div class="col-md-5" style="text-align:center;">
+                <img id="camera_image" src="{{ url_for('static', filename='img/off_camera.png') }}" style="width: auto; margin: auto; height: 100%;">
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center" style="margin-top: 5%">
+            <div class="col col-md-12" style="text-align:center;">
+                <h3 style="color: aliceblue">Velocity</h3>
+            </div>
+        </div>
+        <div class="row justify-content-md-center" style="margin-top: 1%">
+            <div class="col col-md-12" style="text-align:center;">
+                <input id="velocity_slider" type="range" class="slider" />
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center" style="margin-top: 5%">
+            <div class="col col-md-5" style="text-align:center;">
+                <h3 style="color: aliceblue">Motor Left</h3>
+            </div>
+            <div class="col col-md-5" style="text-align:center;">
+                <h3 style="color: aliceblue">Motor Right</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center" style="margin-top: 1%">
+            <div class="col col-md-5" style="text-align:center;">
+                <input id="left_slider" type="range" class="slider" />
+            </div>
+            <div class="col col-md-5" style="text-align:center;">
+                <input id="right_slider" type="range" class="slider" />
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center" style="margin-top: 5%">
+            <div class="col col-md-4">
+                <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="input_tcp_port">TCP/IP Port</span>
+                    </div>
+                    <input id="tcp_port_input" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="5005">
+                </div>
+            </div>
+            <div class="col-md-auto">
+
+            </div>
+            <div class="col col-md-4">
+                <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="input_camera_port">Camera Port</span>
+                    </div>
+                    <input id="camera_port_input" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="8081">
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-md-center" style="margin-top: 6%; margin-bottom: 6%;">
+            <div class="col col-md-2" style="text-align:center;">
+                <button id="reconnect_button" type="button" class="btn btn-lg btn-warning">Reconnect</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
